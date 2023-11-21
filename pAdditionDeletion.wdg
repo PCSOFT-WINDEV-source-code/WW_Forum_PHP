@@ -1,0 +1,162 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : pAdditionDeletion
+ major_version : 28
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1152f6150920d335
+ internal_properties : CAAAAAgAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  internal_properties : CAAAAAgAAAA6PqX6vovUtHZbSOFflmhlGY+Vgn67cOYk15/+A2ZTVW8xeeixDHjI81umWQRzIdelr4TJ39xo/X1LBI5pYm1UiJtvnoDx1cgsu1V3nw==
+  type_code : 31
+  p_codes : []
+  procedures :
+   -
+     name : ModifyTopic
+     internal_properties : CAAAAAgAAAA2lnZlUUj+29PW4G9DJDXS1T2XItKK3pKm15xbGDsW8QG2oI9GOATt1utYpNDyoMwT/44Cb4NE/bYvzvgCPjSOKG2uEsZA8Jopa/PUtiM5qRAihxanu9SCUsnhFOBD2P5EWvZNJLRnr+txEDLmcLCTPIMciMxgCJhVyWSrdfP8/8Pz3A6daJv2/lOytbz+qdl5Z3trMMGMD75YikVLhocSdHG+OpptOyLNbC0oO50VY3ibHkwgmpk1KXvOKuWwtR4x
+     procedure_id : 1248330616943006517
+     type_code : 15
+     code : |1+
+      // Summary: Modifies (in the database) the total number of topics per forum
+      // Syntaxe :
+      //ModifyTopic (<sOperation> est chaîne)
+      //
+      // Paramètres :
+      //	sOperation (chaîne ANSI) :
+      
+      Procedure ModifyTopic(sOperation is string)
+      
+      // Retrieves the forum corresponding to the topic
+      HReadSeekFirst(Forum,ForumID,Topic.ForumID)
+      IF HFound(Forum) THEN
+      	
+      	// Increment
+      	IF sOperation ~= "Addition" THEN
+      		Forum.TotalTopic += 1		
+      		
+      		// Stores the last identifiers
+      		Forum.LastMessageID = Topic.FirstPostID
+      		Forum.LastTopicID = Topic.TopicID
+      		Forum.LastUserID = Topic.AuthorID
+      	END
+      	
+      	// Decrement
+      	IF sOperation ~= "Deletion" THEN
+      		Forum.TotalTopic -= 1		
+      	END		
+      	
+      	HModify(Forum)
+      END
+     type : 458752
+   -
+     name : ModifyMessage
+     internal_properties : CAAAAAgAAADEX8hDWRj3BKjG+5xEoXxogVhEEM+uqkaiTa4JwELiG6HqMS8nkx4+X8NDgzaqzY1E4xM9Hr3d1xRR+DViSRQZw47dKI05XCEJKhFeYhxbEcb6S+Xxpe2GL/vWwzFTNveytHcVEviVW8QfHqWGEhgSIaylb+uhM18GWpXs5Rv0txJiwwdWNlk81tnw554WyYXHE5+zoOFYMrDWGBPDgBm8/Ay0xh5F9/fvcz5Kki3T9fx1kCpdlBWPCr7HSEhBSV72B9Q0axPeXoUsbXYmVnN4kaDKnabZuTf2t8N08fiN8SA=
+     procedure_id : 1248330616943072053
+     type_code : 15
+     code : |1+
+      // Summary: Modifies (in the database) the total number of messages per topic
+      // Syntaxe :
+      //ModifyMessage (<sOperation> est chaîne)
+      //
+      // Paramètres :
+      //	sOperation (chaîne ANSI) : <specify the role of sOperation>
+      
+      Procedure ModifyMessage(sOperation is string)
+      
+      // Retrieves the topic corresponding to the message
+      HReadSeekFirst(Topic,TopicID,Message.TopicID)
+      IF HFound(Topic) THEN
+      	
+      	// Increment
+      	IF sOperation ~= "Addition" THEN
+      		Topic.TotalMessage += 1		
+      		
+      		// Stores the last identifiers
+      		Topic.LastMessageID = Message.MessageID
+      		Topic.LastUserID = Message.AuthorID							
+      	END
+      	
+      	// Decrement
+      	IF sOperation ~= "Deletion" THEN
+      		Topic.TotalMessage -= 1	
+      		nPos is int = HSavePosition(Message)
+      		HReadSeekLast(Message,TopicID,Topic.TopicID)	
+      		IF HFound(Message) THEN
+      			Topic.LastMessageID = Message.MessageID
+      			Topic.LastUserID = Message.AuthorID
+      		ELSE
+      			Topic.LastMessageID = -1
+      			Topic.LastUserID = -1
+      		END
+      		HRestorePosition(nPos)
+      	END		
+      	
+      	HModify(Topic)	
+      	
+      	// Retrieves the user corresponding to the message
+      	HReadSeekFirst(ForumUser,ForumUserID,Message.AuthorID)
+      	IF HFound(ForumUser) THEN
+      		
+      		// Increment
+      		IF sOperation ~= "Addition" THEN
+      			ForumUser.TotalMessage += 1		
+      		END
+      		
+      		// Decrement
+      		IF sOperation ~= "Deletion" THEN
+      			ForumUser.TotalMessage -= 1		
+      		END		
+      		
+      		HModify(ForumUser)
+      	END
+      	
+      	// Retrieves the forum corresponding to the topic of the message
+      	HReadSeekFirst(Forum,ForumID,Topic.ForumID)
+      	IF HFound(Forum) THEN
+      		
+      		// Increment
+      		IF sOperation ~= "Addition" THEN
+      			Forum.TotalMessage += 1		
+      			
+      			// Stores the last identifiers
+      			Forum.LastMessageID = Message.MessageID
+      			Forum.LastTopicID = Message.TopicID
+      			Forum.LastUserID = Message.AuthorID
+      		END
+      		
+      		// Decrement
+      		IF sOperation ~= "Deletion" THEN
+      			Forum.TotalMessage -= 1		
+      		END		
+      		
+      		HModify(Forum)
+      	END
+      	
+      END
+     type : 458752
+   -
+     name : SysPHPEnvironment
+     procedure_id : 1248330616943137589
+     type_code : 15
+     code : |1-
+      function SysPHPEnvironment($p)
+      {
+      return $_ENV[$p];
+      }
+     language : PHP
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : COL_ProcéduresGlobales1
+resources :
+ string_res :
+  identifier : 0x1c189963003525ba
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

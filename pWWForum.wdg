@@ -1,0 +1,288 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : pWWForum
+ major_version : 28
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1448ac6b00117e76
+ internal_properties : CAAAAAgAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  internal_properties : CAAAAAgAAAD2mVVAVOpCpTerTpKzVmcuqK57BLCyVpM+sZ7+huBGd/eQ/L/vbv6T6P4QWvpHmF53KqR883pUdFaE4GWdWQKF83bTxcFmlS6tQdx+leE9DO3pRccKmppen0XbtePk1SdHqQu1cV7Vbr8wMN1LpTTA0+36GFhxTLrBaoNHG/HQul0SbKDl2PPeehHRJ+wUOwIoX6jrOSnbjhyz13G6gJQ+ImjYMhArvVECdbFmNDKfq3H0QOJiUqg5A4KJFiojkRkyLs/ISi7i8nBT3Yi8tQS/5K9WoctRQPaR++cI82uu6st+OskWiE0qwKeatzvPXXgUAC8Tk0bxjDoECfqyjT9Mz1s=
+  type_code : 31
+  p_codes : []
+  procedures :
+   -
+     name : ConnectedUser
+     internal_properties : CAAAAAgAAABm2OlW+xd/K+T4OFKLGrGRi459Q63a6gwRYIj2cUZVBO6S/OpfBF1+xjAlBUyQT+s82hRx2Cpeq/f/W7GBn9Y5LKw0QcLmNrHz0BpSsr9GhSveznN5XpszwHpuZDkVUz7L1JpjkccHHmyBICLh0H2AFGDEv2GrJefhBvaTBmdgdaJQie109J0xsQvjRb0wWuBUnI3WAsH7IDa/C6ZAYMGCyotObRqy0qLfroQWjvzsVK36DKV6/lG5f6Lr3KT2Eqx0Ho8SoqyRs1jIC1OVQQI+Kw5UgI8KnPxAsoRMuq984mysqUQct3+KZLmjGBBFPvKdEeCCq77AVPhlJaAJNPfZn67Fsf0bN7N81Xv6vvakyqLPj1ILN+0bUFDs08mUAYgeKzshichrEM8i38W9bretbfU=
+     procedure_id : 1461646390957317374
+     type_code : 15
+     code : |1+
+      // Summary: Indicates whether the user is connected
+      // Syntax:
+      //[ <Result> = ] ConnectedUser ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the user is connected
+      //
+      
+      Procedure ConnectedUser()
+      
+      	IF gnUserID <> -1 THEN
+      		RESULT True
+      	ELSE
+      		RESULT False
+      	END
+     type : 458752
+   -
+     name : UserDisconnect
+     internal_properties : CAAAAAgAAAAAoT2odkKKZi+iaKm0N6OuVjkQRIlSIEdM5wwyrpYdlKKG/LpyWri1/c4EwGhQq0sbtISjDuQcL+e+b5emZpmkF8coFEQRgu50iehdgjn6R41z7tXmhCiSS78d5GsCMCDMgChxrYZxwFRzYPVhiUfayfQEmnFgpb9UIllkHNJjm7K2pvGZrXkeymm0wk3XWh8MuLf04KdSmwuXXaN3NeD3NB7uirf56sSw6MxFc8uHtYGdkA7dCh1Z3nKTRGzF3/a35t7kYEAehtf+yCGVRxUyDWopIrODTOPo2DRuFGGsK0pNJu/THQTL3R2Xupo1+ZFThGieU6vQbteOIky7jvRGVQxeOx0S3Te/hdluQs4xS0so9uDbZ2tcFZ5H/RnAhXUT1L+C3Om5zxLe1LfAvfFoA2Dt2g==
+     procedure_id : 1461646541281798089
+     type_code : 15
+     code : |1-
+      // Summary: Disconnects the user
+      // Syntax:
+      //UserDisconnect ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	None
+      //
+      
+      Procedure UserDisconnect()
+      
+      	// Disconnects the user
+      	IF ConnectedUser() THEN
+      		HReadSeekFirst(ForumUser,ForumUserID,gnUserID)
+      		ForumUser.OnLine = False
+      		HModify(ForumUser)
+      		gnUserID = -1
+      	END	
+      
+      	
+      	
+      	
+      	
+     type : 458752
+   -
+     name : AuthorizedUser
+     procedure_id : 1462692434576371733
+     type_code : 15
+     code : |1+
+      // Summary: Indicates whether the user has the Administrator rights
+      // Syntax:
+      //[ <Result> = ] AuthorizedUser ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the user has the Administrator rights
+      //
+      
+      Procedure AuthorizedUser()
+      	
+      	IF ConnectedUser() THEN
+      		HReadSeekFirst(ForumUser,ForumUserID,gnUserID)
+      		IF HFound THEN
+      			IF ForumUser.Administrator THEN
+      				RESULT True
+      			ELSE
+      				RESULT False
+      			END
+      		ELSE
+      			RESULT False
+      		END
+      	ELSE
+      		RESULT False
+      	END
+     type : 458752
+   -
+     name : UserStatistics
+     internal_properties : CAAAAAgAAABBYgJVE91zn4oULSdtDBCvmlmB8HbOpUBJ0nF5UYta0TQcbGtFYhhUroFXuVMr7ak3w3zeNeklNzkSTd5mdDX87OKDIzGuvR0BdPvq85ZrSJDuFdhbKRuBvDassVQPeQHjIwdshrfY3+3Ck1LCbqiT+LYVbxXTcAg0arMgc9aZlhfbF35IVL5LmRbhGbTerZpl+W9Y1EOirw9L8zHxq44hXjjIRvE3OlRQPDL9VSHnBc+TSsqLw8+DpaTsTnLT9ad4187ydMSo0F2EoC8F9+sUGS6l5LOzYrFKUkg4cD3e2RaR4qEjTTL5H/df6Iplz+uH0PCqvuEBZn8HXA1R5m7ae0kti8RYq0/LJdNmgI3398cPhDNOZBYPztdAxOT9sVHO68v9++p4VLTWw4p7+qJbMh8sGw==
+     procedure_id : 1462706753959317209
+     type_code : 15
+     code : |1+
+      // Summary: Returns the statistics regarding the number of members and messages
+      // Syntax:
+      //[ <Result> = ] UserStatistics (<bNbMembers>)
+      //
+      // Parameters:
+      //	bNbMembers: True top retrieve the number of registered members, False to retrieve the number of messages
+      // Return value:
+      // 	8-byte integer: Requested total
+      //
+      Procedure UserStatistics(bNbMembers)
+      
+      	IF bNbMembers THEN
+      		// Returns the number of users
+      		RESULT HNbRec(ForumUser) - 1
+      	ELSE
+      		// Returns the number of messages
+      		RESULT HNbRec(Message)
+      	END
+      
+     type : 458752
+   -
+     name : ParseMessage
+     internal_properties : CAAAAAgAAAA+Gm8e7wQb1cB2Frm4dnKFp+P0iODHDONOMO8LmSYd5olfFdudJFoIrjurE4kMb2MuAM/Cul+grHi7oGPaw61x9EgIZAO9x1TewVkWKiK+9gXeJeyywtajrdLUOu7LN7q/iCLLSP0RLzko3/fq7aJs4/YA/Zd9/Naa1SRY0Cd+CZ55gyCMTnNVJEoQ2Qk/PIUfE0VBhR/uNLjdgSbCo0RfGlQzdngsmAVwjTP4GtSUsOvaziIQhwb0h4BRkawc+/hFkJvsXrlOSU2Xqb6U9g9U53hWF6k6jXxHfE+VriOyyppzhayKBIXaWGEl+jTXzHOTfuKr9Zi0vDLD+KsXf3sD/oLmpMrvfgktGlK9E0r5Hp3ETCJE7jC3CIWhIaI6DFZNp6usxlH4KGXWrG+7Qj+gOEUf2hKcfqnz4hdIIK4FOa8cWO9Kg2V2CefDYU1D0JyyPVIm9ESLT7VB0Q99BZHOmEVtr71jTwARor3UeUD93dq6vRINYIe64Wdx2/dHkRdRl2Wig3Gbj4e3FyRyZ5fw/n6f4QmBnkO7S4hHnBcjNHB7dlO8jdyczVk2Y9QXYwFG/kfVOh+KhnQ/M7VqK0E=
+     procedure_id : 1462758413882087459
+     type_code : 15
+     code : |1+
+      // Summary: <specify the action of the procedure>
+      // Syntax:
+      //[ <Result> = ] ParseMessage (<sParsedContent>, <sSignature>)
+      //
+      // Parameters:
+      //	sParsedContent: Text content to parse
+      //	sSignature: Signature to add
+      // Return value:
+      // 	Undefined type: Full formatted message
+      //
+      Procedure ParseMessage(sParsedContent, sSignature)
+      	// Formatting
+      	
+      	// EMOTICONS **********************************************************
+      	sParsedContent = Replace(sParsedContent, "&lt;_&lt;", 		"<img src=""/" + FolderWeb() + "/images/smileys/dry.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":(", 		"<img src=""/" + FolderWeb() + "/images/smileys/sad.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":)", 		"<img src=""/" + FolderWeb() + "/images/smileys/smile.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":D", 		"<img src=""/" + FolderWeb() + "/images/smileys/biggrin.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":P", 		"<img src=""/" + FolderWeb() + "/images/smileys/tongue.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":angry:", 	"<img src=""/" + FolderWeb() + "/images/smileys/mad.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":blink:", 		"<img src=""/" + FolderWeb() + "/images/smileys/blink.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":huh:", 		"<img src=""/" + FolderWeb() + "/images/smileys/huh.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":lol:", 		"<img src=""/" + FolderWeb() + "/images/smileys/laugh.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":o", 		"<img src=""/" + FolderWeb() + "/images/smileys/ohmy.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":ph34r:", 	"<img src=""/" + FolderWeb() + "/images/smileys/ph34r.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":rolleyes:", 	"<img src=""/" + FolderWeb() + "/images/smileys/rolleyes.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ":unsure:", 	"<img src=""/" + FolderWeb() + "/images/smileys/unsure.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, ";)", 		"<img src=""/" + FolderWeb() + "/images/smileys/wink.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	sParsedContent = Replace(sParsedContent, "B)", 		"<img src=""/" + FolderWeb() + "/images/smileys/cool.gif"" width=""20"" height=""20"" align=""absmiddle"">")
+      	// EMOTICONS **********************************************************
+      	sSignature = Replace(sSignature, "&lt;_&lt;", 		"<img src=""/" + FolderWeb() + "/images/smileys/dry.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":(", 		"<img src=""/" + FolderWeb() + "/images/smileys/sad.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":)", 		"<img src=""/" + FolderWeb() + "/images/smileys/smile.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":D", 		"<img src=""/" + FolderWeb() + "/images/smileys/biggrin.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":P", 		"<img src=""/" + FolderWeb() + "/images/smileys/tongue.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":angry:", 	"<img src=""/" + FolderWeb() + "/images/smileys/mad.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":blink:", 		"<img src=""/" + FolderWeb() + "/images/smileys/blink.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":huh:", 		"<img src=""/" + FolderWeb() + "/images/smileys/huh.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":lol:", 		"<img src=""/" + FolderWeb() + "/images/smileys/laugh.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":o", 		"<img src=""/" + FolderWeb() + "/images/smileys/ohmy.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":ph34r:", 	"<img src=""/" + FolderWeb() + "/images/smileys/ph34r.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":rolleyes:", 	"<img src=""/" + FolderWeb() + "/images/smileys/rolleyes.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ":unsure:", 	"<img src=""/" + FolderWeb() + "/images/smileys/unsure.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, ";)", 		"<img src=""/" + FolderWeb() + "/images/smileys/wink.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      	sSignature = Replace(sSignature, "B)", 		"<img src=""/" + FolderWeb() + "/images/smileys/cool.gif"" width=""20"" height=""20""  align=""absmiddle"">")
+      
+      	IF sSignature <> "" THEN
+      		// Parses the signature
+      		sParsedContent += "<BR>" + CR + "--------------------<BR>" + CR + sSignature
+      	END
+      RESULT sParsedContent
+     type : 458752
+   -
+     name : PageDisplayPrevious
+     internal_properties : CAAAAAgAAAB+z1GbN5DG3c6OvxgHveNe2DUqdVonAciFr9oU6DUAL2ZvNamP25l4YbILeVB0FpGEj7HQemyjBlEJhmhtDCuu6wlRRmacgRD58gjjwfwBhlV6GTDjzmFCcJq/mKGUYZiFqujrwNX2vzDyWkGl
+     procedure_id : 2030476060139368208
+     type_code : 15
+     code : |1+
+      // Summary: Displays the previous page
+      // Syntax:
+      // PageDisplayPrevious ()
+      //
+      Procedure PageDisplayPrevious()
+      
+      IF gsQueryString<>"" THEN	
+      	arrParams is array of string
+      	StringToArray(gsQueryString,arrParams,"&")
+      	//takes the VALUE part of the parameter (removes the NAME) => p1=Value1
+      	FOR i = 1 _TO_ arrParams..Occurrence
+      		arrParams[i] = ExtractString(arrParams[i],2,"=")
+      	END
+      	SWITCH arrParams..Occurrence
+      		CASE 1
+      			PageDisplay(gsPreviousPage,arrParams[1])
+      		CASE 2
+      			PageDisplay(gsPreviousPage,arrParams[1],arrParams[2])
+      		CASE 3
+      			PageDisplay(gsPreviousPage,arrParams[1],arrParams[2],arrParams[3])
+      		CASE 4
+      			PageDisplay(gsPreviousPage,arrParams[1],arrParams[2],arrParams[3],arrParams[4])
+      		OTHER CASE
+      			EndProgram("too many parameters")
+      	END
+      ELSE
+      	PageDisplay(gsPreviousPage)	
+      END
+     type : 458752
+   -
+     name : InitializeData
+     internal_properties : CAAAAAgAAAAogJ3Raxegx+K9UJafXmMAl8qds9Gh2HdwkM5udecceUoyfvaH3jaCbiz/xPgHGeuUDe+6J8mb/oO2MG7yrpC685cEyTJhf4NIp+eTdRd50WgT9En1SPWSHElkki3eYD1flj2vhFfjHB4RTDdG2DdindvvamQtKL+m6+o4t28lGOsVRdfU0TKPS3gKCi9TYhq69wKzTrponk9mXHL9gNoBI9L6Vs7L
+     procedure_id : 2099250804492583737
+     type_code : 15
+     code : |1-
+      Procedure InitializeData()
+      bNew is boolean
+      
+      HReadSeekFirst(ForumUser,Login,<§@1448a7690009ed5e0005§>)	
+      IF HFound(ForumUser) = False THEN
+      	bNew = True
+      END
+      
+      
+      IF bNew THEN
+      	// Create the system user
+      	ForumUser.Administrator = True
+      	ForumUser.Avatar = "../images/avatar/user.png"
+      	ForumUser.Email   = "info@forum-webdev.net"
+      	ForumUser.OnLine = False
+      	ForumUser.Login   = <§@1448a7690009ed5e0001§>
+      	ForumUser.Password = <§@1448a7690009ed5e0002§>
+      	ForumUser.CreationDate = "19800101000000"
+      	ForumUser.Signature = <§@1448a7690009ed5e0004§> + CR
+      	ForumUser.TotalMessage = 0
+      	HAdd(ForumUser)
+      END
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : COL_Collection1
+resources :
+ string_res :
+  identifier : 0x1448a7690009ed5e
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+  strings :
+   -
+     text :
+      en-GB : You must be identified and you must have the management rights to perform this operation
+     index : 0
+   -
+     text :
+      en-GB : Administrator
+     index : 1
+   -
+     text :
+      en-GB : demo
+     index : 2
+   -
+     text :
+      en-GB : "\"<font size=\"2\"><span style=\"font-family: Arial,Helvetica,sans-serif;\">WebDev: Forums, powered by <span style=\"font-weight: bold;\">WebDev </span>of PC SOFT.\" "
+     index : 3
+   -
+     text :
+      en-GB : "<font size=\"2\"><span style=\"font-family: Arial,Helvetica,sans-serif;\">WebDev: Forums, powered by <span style=\"font-weight: bold;\">WebDev </span>of PC SOFT."
+     index : 4
+   -
+     text :
+      en-GB : Administrator
+     index : 5
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -1,0 +1,97 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : pForum
+ major_version : 28
+ minor_version : 0
+ type : 65539
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1448ac65001065be
+ internal_properties : CAAAAAgAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  internal_properties : CAAAAAgAAABZG0MHBLDMkjzjB8rQeO7a+EiO4RyysH1EWJPvPMVLJOY2a1rTGX6KU3GrlURpkkD1yhwPks3LiT9nuw2hNvROhipyB1r9z9csIejANdBEzGlCsKoEdUu73iID1VD0tXoCH2oR1/nEPAJ12vuGajWDuU7S
+  type_code : 41
+  p_codes :
+   -
+     type : 983040
+     role : N
+   -
+     type : 983042
+     role : N
+  procedures :
+   -
+     name : VerifEmail
+     internal_properties : CAAAAAgAAADLjMx1KnlGfTSFSSD/gEQ+KAYYls2mBTUIP+nyJsm45g1avVxP6YaTsGMEGFhJThJ1Vn4XBKroHVxqSfE6Txnlm+xjH2EukguOvrhY3GMHjQT4awzxXIA/pdM/0heg7xakjoLYbA==
+     procedure_id : 1821659251455876313
+     type_code : 15
+     code : |1+
+      // Summary: Checks whether a valid email format was entered by the user
+      // Syntax:
+      //[ <Result> = ] VerifEmail (<sEmail>)
+      //
+      // Parameters:
+      //	sEmail: email address entered by the user
+      // Return value:
+      // 	Boolean: True if the address is valid
+      //
+      
+      Procedure VerifEmail(sEmail)
+      
+      // checks whether a valid email format was entered by the user
+      // returns 1 if the format is correct, 0 otherwise 
+      
+      nLongAro		is int       // position of @
+      nLongLastPoint 	is int 		// position of the last dot
+      sUser  	is string    	// what is found before @
+      sServer	 	is string    	// what is found before @ and the last dot
+      sCountry         	is string    	// what is found after the last dot
+      
+      // position of @ 
+      nLongAro = Position(sEmail,"@")
+      // no @
+      IF NOT nLongAro THEN RESULT False
+      // several @
+      IF Position(sEmail[[nLongAro+1 TO Length(sEmail)]], "@")<>0 THEN RESULT 0
+      
+      // calculate the position of the last dot
+      i is int =1
+      // search for the last dot in the string found after @
+      WHILE ExtractString(sEmail[[nLongAro+1 TO Length(sEmail)]], i, ".") <> EOT
+      	sCountry=ExtractString(sEmail[[nLongAro+1 TO Length(sEmail)]], i, ".")
+      	i++
+      END
+      // no.
+      IF i=1 THEN RESULT False
+      // position of the last dot
+      nLongLastPoint=Length(sEmail)-Length(sCountry)
+      
+      // extract the user part  
+      sUser = sEmail[[1 TO nLongAro -1]]
+      // extract the server part
+      sServer	= sEmail[[nLongAro+1 TO nLongLastPoint-1]]
+      
+      IF (Length(sUser) = 0 OR Length(sServer) = 0) THEN 
+      	RESULT False
+      END
+      
+      IF (Length(sCountry) <2 OR Length(sCountry) >3) THEN
+      	RESULT False
+      END
+      
+      RESULT True
+      
+     type : 458752
+     role : N
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : NAV_CollectionNavigateur1
+resources :
+ string_res :
+  identifier : 0x1448a769000cef33
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

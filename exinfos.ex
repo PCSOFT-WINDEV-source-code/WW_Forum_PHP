@@ -1,0 +1,10 @@
+[INFOS]
+gaf=0
+title=WW_Forum_PHP
+image=description.gif
+description=description.rtf
+source=1
+preview=preview.png
+typesite=0
+[OBJECT]
+WW_Forum_PHP.WWP=4096
